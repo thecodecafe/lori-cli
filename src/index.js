@@ -2,6 +2,7 @@
 
 const args  = process.argv.slice(2);
 const colors = require('./utils/colors');
+const Availables = require('./utils/availableCommands');
 // get commands
 const NewCmd = require('./commands/new.commands');
 const HelpCmd = require('./commands/help.commands');
@@ -13,10 +14,9 @@ switch(args[0]){
             NewCmd.run();
         break;
     default:
-            // run help command
-            HelpCmd.run();
+            // do nothing
         break;
 }
 
-// run help command
-console.log(colors.error('Unknown lori command user `lori --help or lori lori` for available commands.'))
+// display available commands
+Availables.log();
