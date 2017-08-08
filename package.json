@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir lib",
-    "reset": "babel src --out-dir lib && npm install -g && npm link",
+    "reset": "babel src --out-dir lib && npm install -g && npm link"
   },
   "repository": {
     "type": "git",
