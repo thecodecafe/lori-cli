@@ -1,0 +1,41 @@
+{
+  "name": "lori-cli",
+  "version": "1.0.0",
+  "description": "Command line tool for lori",
+  "main": "lib/index.js",
+  "bin": {
+    "lori": "lib/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mrbarde/lor-cli.git"
+  },
+  "keywords": [
+    "lori",
+    "lori-bites",
+    "framework",
+    "react",
+    "terminal",
+    "cli",
+    "command-line"
+  ],
+  "author": "Daniel Barde <mrbarde2k@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrbarde/lor-cli/issues"
+  },
+  "homepage": "https://github.com/mrbarde/lor-cli#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1"
+  },
+  "dependencies": {
+    "save": "^2.3.1"
+  }
+}
