@@ -10,7 +10,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir lib",
     "reset": "babel src --out-dir lib && npm install -g && npm link",
-    "fire": "node lib/index.js"
   },
   "repository": {
     "type": "git",
