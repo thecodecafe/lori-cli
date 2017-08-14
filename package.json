@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --out-dir lib",
-    "reset": "babel src --out-dir lib && npm install -g && npm link"
+    "start": "babel src --out-dir lib && npm install -g && npm link"
   },
   "repository": {
     "type": "git",
@@ -37,8 +37,13 @@
     "babel-preset-es2017": "^6.24.1"
   },
   "dependencies": {
-    "colors": "^1.1.2",
+    "chalk": "^2.1.0",
     "commander": "^2.11.0",
-    "save": "^2.3.1"
+    "cross-spawn": "^5.1.0",
+    "download-git-repo": "^1.0.1",
+    "figlet": "^1.2.0",
+    "rimraf": "^2.6.1",
+    "shelljs": "^0.7.8",
+    "spawn-sync": "^1.0.15"
   }
 }

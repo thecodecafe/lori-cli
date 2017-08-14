@@ -1,4 +1,4 @@
-const colors = require('./colors');
+const chalk = require('chalk');
 
 class CommandDescriber{
 
@@ -27,20 +27,20 @@ class CommandDescriber{
 
     log(){
         // log command info to console
+        console.log(chalk.bold(chalk.blue('Command:'))+' '+chalk.green(this.name));
+        if(typeof this.description != 'null') console.log(chalk.italic(this.description));
         console.log();
-        console.log(colors.debug('   COMMAND: '+this.name));
-        if(typeof this.description != 'null') console.log('   '+this.description);;
-        if(typeof this.usage != 'null') console.log('   Usage: '+this.usage);
+        if(typeof this.usage != 'null') { console.log(chalk.bold(chalk.blue('Usage:'))+' '+this.usage); console.log(); }
         if(this.options.length > 0){
-            console.log(colors.verbose('   OPTIONS'))
-            console.log(colors.verbose('   -------'))
+            console.log(chalk.underline(chalk.bold(chalk.blue('Options'))))
             this.options.map(this.logOption)
         }
+        console.log();
         console.log();
     }
 
     logOption(item){
-        console.log('    '+item.name+': '+item.description)
+        console.log(item.name+': '+item.description)
     }
 }
 
