@@ -42,7 +42,6 @@
     "cross-spawn": "^5.1.0",
     "download-git-repo": "^1.0.1",
     "figlet": "^1.2.0",
-    "rimraf": "^2.6.1",
     "shelljs": "^0.7.8",
     "spawn-sync": "^1.0.15"
   }

@@ -1,27 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const spawn = require('spawn-sync');
+const childProcess = require('child_process');
 const Commander = require('../utils/commander');
 const shell = require('shelljs');
-const execSync = require('child_process').execSync;
+const { execSync } = childProcess;
 
 class NewCmd extends Commander{
 
-    constructor()
-    {
+    constructor(){
         super();
         this.root = process.env.PWD;
         this.projectRoot = this.root;
         this.name = null;
         this.branch = 'master';
-        this.source = 'https://github.com/mrbarde';
+        this.source = 'https://github.com/thecodecafe';
         this.repo = null;
     }
 
-    fire()
-    {
+    fire(){
         this.program = this.commander
-            .command('new')
+            .command('init')
             .description('Creates a new lori project.')
             .arguments('<project-name>')
             .option('--node', 'Install a node destribution.')
@@ -30,8 +29,7 @@ class NewCmd extends Commander{
             .action(this.action.bind(this))
     }
     
-    action(name, options)
-    {
+    action(name, options){
         // prep command data
         this.name = name;
         this.type = (options.php) ? 'php' : (options.node) ? 'node' : 'html'
@@ -43,7 +41,7 @@ class NewCmd extends Commander{
         this._newLine();
 
         // stop if project already exists
-        if(this.alreadyExists()){
+        if(this.checkIfProjectAlreadyExists()){
             // display error in console
             this._error(`A project with the name ${this.name} already exists in this directory`);
             this._newLine();
@@ -62,19 +60,14 @@ class NewCmd extends Commander{
         process.chdir(this.root);
 
         // create project
-        this.createProject();
+        this.startCreatingProject();
     }
 
-    createProject()
-    {
+    startCreatingProject(){
         this._info(`Creating your lori project (${this.name}).`);
+
         // prepare install command arguments
-        let args = [
-            'clone',
-            this.source,
-            this.name,
-            '--quiet'
-        ];
+        let args = [ 'clone', this.source, this.name, '--quiet' ];
 
         // if verbose option is set
         if(this.program.verbose){
@@ -86,23 +79,22 @@ class NewCmd extends Commander{
 
         // install Lori
         this._waiting(`Installing, this might take a minute...`);
-        this.spawn('git', args, {stdio: 'inherit'}, this.installComplete.bind(this));
+        this.spawnNewProcess('git', args, {stdio: 'inherit'}, this.installComplete.bind(this));
     }
 
-    installComplete(err)
-    {
+    installComplete(err){
         // cancel process if there was an error
         if(err){
             this._error(err.message);
             this._newLine();
             this._exit();
         }
+
         // install dependencies
         this.installDependencies();
     }
 
-    installDependencies()
-    {
+    installDependencies(){
         // display process info
         this._newLine();
         this._waiting(`Installing dependencies...`);
@@ -110,16 +102,16 @@ class NewCmd extends Commander{
         // move into project directory
         process.chdir(this.projectRoot);
 
+        // deletes the .git directory after cloning the required repo
+        this.deleteGitDirectory();
+
         // determine what package manager to use
-        var command = this.shouldUseYarn() ? 'yarn' : 'npm';
+        var command = this.checkIfYarnIsInstalled() ? 'yarn' : 'npm';
 
         // prepare arguments
-        let args = [
-            'install',
-            '--loglevel'
-        ];
+        let args = [ 'install', '--loglevel' ];
 
-        // if verbose mode is set
+        // allow to display errors if verbos mode is set
         if(this.program.verbose){
             args = args.concat('error');
         }else{
@@ -127,11 +119,10 @@ class NewCmd extends Commander{
         }
 
         // install npm packages
-        this.spawn(command, args, {stdio: 'inherit'}, this.installDependenciesComplete.bind(this));
+        this.spawnNewProcess(command, args, {stdio: `inherit`}, this.showSuccessMessage.bind(this));
     }
 
-    installDependenciesComplete(err)
-    {
+    showSuccessMessage(err){
         // cancel process if there was an error
         if(err){
             this._error(err.message);
@@ -147,13 +138,11 @@ class NewCmd extends Commander{
         this._exit();
     }
 
-    alreadyExists()
-    {
+    checkIfProjectAlreadyExists(){
         return fs.existsSync(this.name);
     }
 
-    spawn(cmd, args, options, callback)
-    {
+    spawnNewProcess(cmd, args, options, callback){
         // run git command
         let child = spawn(cmd, args, options);
         // if there were errors
@@ -167,14 +156,30 @@ class NewCmd extends Commander{
         callback();
     }
 
-    shouldUseYarn()
-    {
+    checkIfYarnIsInstalled(){
         try{
             execSync('yarnpkg --version', { stdio: 'ignore' });
             return true;
         }catch(e){
             return false;
         }
+    }
+
+    deleteGitDirectory(){
+        // default to unix system command for mac and linux users
+        var cmd = 'rm';
+        var args = ['-rf', `${this.projectRoot}/.git`];
+        // use windows command if running on windows
+        if(this.isRunningOnWindows()){
+            cmd = 'rd';
+            args = ['/s', '/q', `${this.projectRoot}/.git`];
+        }
+        // spawn child process in quit mode and delete directory
+        childProcess.spawn(cmd, args, {stdio: 'ignore'});
+    }
+
+    isRunningOnWindows(){
+        return process.platform == 'win32';
     }
 }
 

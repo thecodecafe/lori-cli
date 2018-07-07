@@ -3,14 +3,12 @@ var fs = require('fs');
 var packageJson = require('../../package.json');
 
 class Help{
-
     constructor(){
         // set commander 
         this.commander = require('commander')
         this.chalk = require('chalk');
         this.exitOnFinish = true;
     }
-
     run(){
         this.commander.version(packageJson.version);
         // set commands and their options
@@ -20,7 +18,6 @@ class Help{
         // exit process
         if(this.exitOnFinish) process.exit(1);
     }
-
     _info(message){ 
         console.log(this.chalk.bgBlue(' (i) ')+this.chalk.blue(' '+message)); 
     }
@@ -30,13 +27,18 @@ class Help{
     _warn(message){ 
         console.log(this.chalk.bgHex('#ffa700')(this.chalk.white(' /!\\ '))+this.chalk.hex('#ffa700')(' '+message)); 
     }
-    _waiting(message){ this._warn(message); }
+    _waiting(message){
+        this._warn(message);
+    }
     _error(message){ 
         console.log(this.chalk.bgRed(' (!) ')+this.chalk.red(' '+message)); 
     }
-    _newLine(){ console.log(); }
-    _exit(code){ code = (code) ? code : 1; process.exit(code); }
-
+    _newLine(){
+        console.log(); 
+    }
+    _exit(code){
+        code = (code) ? code : 1; process.exit(code);
+    }
 }
 
 module.exports = Help;

@@ -21,7 +21,7 @@ class AvailableCommands{
             console.log();
             return;
         }
-        console.log(chalk.blue(data))
+        console.log(chalk.blue(data));
         this.commands.map((item) => {
             item.log();
         });
@@ -29,9 +29,9 @@ class AvailableCommands{
 
     setCommands(){
         // new command
-        var newDescriber = new describer('new');
+        var newDescriber = new describer('init');
         newDescriber.setDescription('Starts a new lori project.');
-        newDescriber.setUsage('lori new [options] <name>');
+        newDescriber.setUsage('lori init [options] <name>');
         newDescriber.addOption('-t --type', 'For specifying development environment type, supports html, php and node.');
         this.commands.push(newDescriber);
     }

@@ -12,12 +12,12 @@ Requirements.check();
 
 // determine what command to run
 switch(args[0]){
-    case 'help':
-            // display available commands
-            AvailableCommands.log();
-        break;
-    default:
+    case 'init':
             // run new commands
             NewCmd.run();
+        break;
+    default:
+            // display available commands
+            AvailableCommands.log();
         break;
 }
