@@ -28,12 +28,12 @@ class AvailableCommands{
     }
 
     setCommands(){
-        // new command
-        var newDescriber = new describer('init');
-        newDescriber.setDescription('Starts a new lori project.');
-        newDescriber.setUsage('lori init [options] <name>');
-        newDescriber.addOption('-t --type', 'For specifying development environment type, supports html, php and node.');
-        this.commands.push(newDescriber);
+        // init command
+        var initDescriber = new describer('init');
+        initDescriber.setDescription('Starts a new lori project.');
+        initDescriber.setUsage('lori init [options] <name>');
+        initDescriber.addOption('-t --type', 'For specifying development environment type, supports html, php and node.');
+        this.commands.push(initDescriber);
     }
 
 }
