@@ -1,13 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const spawn = require('spawn-sync');
 const childProcess = require('child_process');
 const Commander = require('../utils/commander');
 const shell = require('shelljs');
-const { execSync } = childProcess;
+const { spawn } = childProcess;
 
 class NewCmd extends Commander{
-
     constructor(){
         super();
         this.root = process.env.PWD;
@@ -17,7 +15,6 @@ class NewCmd extends Commander{
         this.source = 'https://github.com/thecodecafe';
         this.repo = null;
     }
-
     fire(){
         this.program = this.commander
             .command('init')
@@ -28,7 +25,6 @@ class NewCmd extends Commander{
             .option('--verbose', 'Show more logs.')
             .action(this.action.bind(this))
     }
-    
     action(name, options){
         // prep command data
         this.name = name;
@@ -62,7 +58,6 @@ class NewCmd extends Commander{
         // create project
         this.startCreatingProject();
     }
-
     startCreatingProject(){
         this._info(`Creating your lori project (${this.name}).`);
 
@@ -81,7 +76,6 @@ class NewCmd extends Commander{
         this._waiting(`Installing, this might take a minute...`);
         this.spawnNewProcess('git', args, {stdio: 'inherit'}, this.installComplete.bind(this));
     }
-
     installComplete(err){
         // cancel process if there was an error
         if(err){
@@ -93,7 +87,6 @@ class NewCmd extends Commander{
         // install dependencies
         this.installDependencies();
     }
-
     installDependencies(){
         // display process info
         this._newLine();
@@ -121,7 +114,6 @@ class NewCmd extends Commander{
         // install npm packages
         this.spawnNewProcess(command, args, {stdio: `inherit`}, this.showSuccessMessage.bind(this));
     }
-
     showSuccessMessage(err){
         // cancel process if there was an error
         if(err){
@@ -137,34 +129,9 @@ class NewCmd extends Commander{
         this._newLine();
         this._exit();
     }
-
     checkIfProjectAlreadyExists(){
         return fs.existsSync(this.name);
     }
-
-    spawnNewProcess(cmd, args, options, callback){
-        // run git command
-        let child = spawn(cmd, args, options);
-        // if there were errors
-        if(child.status !== 0){
-            // return an error
-            var err = new Error(`Error running command ${child.args.join(' ')}`);
-            callback(err);
-            return;
-        }
-        // fire the callback
-        callback();
-    }
-
-    checkIfYarnIsInstalled(){
-        try{
-            execSync('yarnpkg --version', { stdio: 'ignore' });
-            return true;
-        }catch(e){
-            return false;
-        }
-    }
-
     deleteGitDirectory(){
         // default to unix system command for mac and linux users
         var cmd = 'rm';
@@ -175,11 +142,7 @@ class NewCmd extends Commander{
             args = ['/s', '/q', `${this.projectRoot}/.git`];
         }
         // spawn child process in quit mode and delete directory
-        childProcess.spawn(cmd, args, {stdio: 'ignore'});
-    }
-
-    isRunningOnWindows(){
-        return process.platform == 'win32';
+        spawn(cmd, args, {stdio: 'ignore'});
     }
 }
 

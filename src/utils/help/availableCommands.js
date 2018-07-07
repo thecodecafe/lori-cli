@@ -7,11 +7,9 @@ class AvailableCommands{
         this.commands = [];
         this.setCommands();
     }
-
-    log(){
+    show(){
         figlet('Lori', this.figCb.bind(this));
     }
-
     figCb(err, data){
         if (err) {
             console.log();
@@ -23,10 +21,9 @@ class AvailableCommands{
         }
         console.log(chalk.blue(data));
         this.commands.map((item) => {
-            item.log();
+            item.show();
         });
     }
-
     setCommands(){
         // init command
         var initDescriber = new describer('init');
@@ -35,7 +32,6 @@ class AvailableCommands{
         initDescriber.addOption('-t --type', 'For specifying development environment type, supports html, php and node.');
         this.commands.push(initDescriber);
     }
-
 }
 
 module.exports = new AvailableCommands();

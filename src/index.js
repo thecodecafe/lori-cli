@@ -18,6 +18,6 @@ switch(args[0]){
         break;
     default:
             // display available commands
-            AvailableCommands.log();
+            AvailableCommands.show();
         break;
 }

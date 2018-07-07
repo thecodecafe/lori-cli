@@ -1,7 +1,6 @@
 const chalk = require('chalk');
 
 class Requirements {
-
     constructor(){
         // get node version
         this.nodeCurrentVersion = process.versions.node;
@@ -9,12 +8,10 @@ class Requirements {
         this.nodeMajorVersion = this.nodeSemver[0];
         this.nodeLeastVersion = 6;
     }
-
     check(){
         // check for node version
         this.checkNodeVersion();
     }
-
     checkNodeVersion(){
         // if node is not up to minimum requirement
         if(this.nodeMajorVersion < this.nodeLeastVersion){
@@ -29,8 +26,7 @@ class Requirements {
             // exit proces
             process.exit(1);
         }
-    }    
-
+    }
 }
 
 module.exports = new Requirements();

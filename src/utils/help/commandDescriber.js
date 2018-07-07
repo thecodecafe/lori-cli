@@ -1,31 +1,25 @@
 const chalk = require('chalk');
 
 class CommandDescriber{
-
     constructor(name){
         this.name = name || null;
         this.description = null;
         this.usage = null;
         this.options = [];
     }
-
     setName(name){
         this.name = name;
     }
-
     setDescription(description){
         this.description = description;
     }
-
     setUsage(usage){
         this.usage = usage;
     }
-
     addOption(name, description){
         this.options.push({name:name, description: description});
     }
-
-    log(){
+    show(){
         // log command info to console
         console.log(chalk.bold(chalk.blue('Command:'))+' '+chalk.green(this.name));
         if(typeof this.description != 'null') console.log(chalk.italic(this.description));
@@ -33,13 +27,12 @@ class CommandDescriber{
         if(typeof this.usage != 'null') { console.log(chalk.bold(chalk.blue('Usage:'))+' '+this.usage); console.log(); }
         if(this.options.length > 0){
             console.log(chalk.underline(chalk.bold(chalk.blue('Options'))))
-            this.options.map(this.logOption)
+            this.options.map(this.showOption)
         }
         console.log();
         console.log();
     }
-
-    logOption(item){
+    showOption(item){
         console.log(item.name+': '+item.description)
     }
 }

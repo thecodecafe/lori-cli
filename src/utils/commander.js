@@ -1,6 +1,6 @@
-var http = require('http');
-var fs = require('fs');
-var packageJson = require('../../package.json');
+const packageJson = require('../../package.json');
+const { execSync } = require('child_process');
+const spawnSync = require('spawn-sync');
 
 class Help{
     constructor(){
@@ -38,6 +38,30 @@ class Help{
     }
     _exit(code){
         code = (code) ? code : 1; process.exit(code);
+    }
+    checkIfYarnIsInstalled(){
+        try{
+            execSync('yarnpkg --version', { stdio: 'ignore' });
+            return true;
+        }catch(e){
+            return false;
+        }
+    }
+    isRunningOnWindows(){
+        return process.platform == 'win32';
+    }
+    spawnNewProcess(cmd, args, options, callback){
+        // run git command
+        let child = spawnSync(cmd, args, options);
+        // if there were errors
+        if(child.status !== 0){
+            // return an error
+            var err = new Error(`Error running command ${child.args.join(' ')}`);
+            callback(err);
+            return;
+        }
+        // fire the callback
+        callback();
     }
 }
 
